@@ -11,7 +11,7 @@ class NoteDetailResponseSchema(BaseModel):
     content: str
     created_at: datetime
     updated_at: datetime
-    versions: List["NoteVersionDetailResponseSchema"]
+    versions: List["VersionDetailResponseSchema"]
 
 
 class NoteListResponseSchema(BaseModel):
@@ -36,7 +36,7 @@ class NoteUpdateRequestSchema(BaseModel):
     content: str = Field(..., description="The updated content of the note")
 
 
-class NoteVersionDetailResponseSchema(BaseModel):
+class VersionDetailResponseSchema(BaseModel):
     """Schema for note version detail response."""
 
     id: int
@@ -46,10 +46,10 @@ class NoteVersionDetailResponseSchema(BaseModel):
     created_at: datetime
 
 
-class NoteVersionListResponseSchema(BaseModel):
+class VersionListResponseSchema(BaseModel):
     """Schema for paginated note version list response."""
 
-    versions: List[NoteVersionDetailResponseSchema]
+    versions: List[VersionDetailResponseSchema]
     prev_page: Optional[str] = Field(None, description="URL for previous page")
     next_page: Optional[str] = Field(None, description="URL for next page")
     total_pages: int = Field(..., description="Total number of pages")

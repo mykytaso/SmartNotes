@@ -3,6 +3,6 @@ from schemas.notes import (
     NoteListResponseSchema,
     NoteCreateRequestSchema,
     NoteUpdateRequestSchema,
-    NoteVersionDetailResponseSchema,
-    NoteVersionListResponseSchema,
+    VersionDetailResponseSchema,
+    VersionListResponseSchema,
 )

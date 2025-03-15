@@ -3,13 +3,13 @@ from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from database import get_db, NoteModel, NoteVersionModel
+from database import get_db, NoteModel, VersionModel
 from schemas import (
     NoteListResponseSchema,
     NoteDetailResponseSchema,
     NoteCreateRequestSchema,
     NoteUpdateRequestSchema,
-    NoteVersionListResponseSchema,
+    VersionListResponseSchema,
 )
 
 router = APIRouter()
@@ -97,14 +97,14 @@ async def update_note(
 
     # Check the latest version of the note
     latest_version_result = await db.execute(
-        select(func.max(NoteVersionModel.version)).where(
-            NoteVersionModel.note_id == note_id
+        select(func.max(VersionModel.version)).where(
+            VersionModel.note_id == note_id
         )
     )
     latest_version = latest_version_result.scalar() or 0
 
     # Store the version of the note
-    note_version = NoteVersionModel(
+    note_version = VersionModel(
         note_id=note_id, content=note.content, version=latest_version + 1
     )
 
@@ -128,8 +128,8 @@ async def delete_note(note_id: int, db: AsyncSession = Depends(get_db)):
     return {"message": "Note deleted successfully."}
 
 
-@router.get("/notes/{note_id}/versions/", response_model=NoteVersionListResponseSchema)
-async def get_note_versions(
+@router.get("/notes/{note_id}/versions/", response_model=VersionListResponseSchema)
+async def get_versions(
     note_id: int,
     page: int = Query(1, ge=1),
     per_page: int = Query(10, ge=1, le=100),

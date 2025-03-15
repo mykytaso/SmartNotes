@@ -1,7 +1,7 @@
 from database.models import (
     Base,
     NoteModel,
-    NoteVersionModel,
+    VersionModel,
 )
 from database.session import (
     init_db,

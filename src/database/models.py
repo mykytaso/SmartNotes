@@ -19,11 +19,11 @@ class NoteModel(Base):
         DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
-    versions: Mapped[List["NoteVersionModel"]] = relationship(back_populates="note", cascade="all, delete-orphan")
+    versions: Mapped[List["VersionModel"]] = relationship(back_populates="note", cascade="all, delete-orphan")
 
 
-class NoteVersionModel(Base):
-    __tablename__ = "note_versions"
+class VersionModel(Base):
+    __tablename__ = "versions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     version: Mapped[int] = mapped_column(Integer, nullable=False)
