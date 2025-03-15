@@ -43,7 +43,7 @@ async def get_notes(
 
 
 @router.get("/notes/{note_id}/", response_model=NoteDetailResponseSchema)
-async def get_movie(note_id: int, db: AsyncSession = Depends(get_db)):
+async def get_note(note_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(NoteModel).where(NoteModel.id == note_id))
     note = result.scalar_one_or_none()
     if not note:
@@ -51,3 +51,14 @@ async def get_movie(note_id: int, db: AsyncSession = Depends(get_db)):
             status_code=404, detail="Note with the given ID was not found."
         )
     return note
+
+
+@router.get("/notes/{note_id}/versions/", response_model=NoteDetailResponseSchema)
+async def get_note_versions(note_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(NoteModel).where(NoteModel.id == note_id))
+    note = result.scalar_one_or_none()
+    if not note:
+        raise HTTPException(
+            status_code=404, detail="Note with the given ID was not found."
+        )
+    return note.versions
