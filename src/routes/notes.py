@@ -5,7 +5,12 @@ from sqlalchemy.orm import selectinload
 
 from database import get_db, NoteModel
 from schemas import NoteVersionListResponseSchema
-from schemas.notes import NoteListResponseSchema, NoteDetailResponseSchema
+from schemas.notes import (
+    NoteListResponseSchema,
+    NoteDetailResponseSchema,
+    NoteRequestCreateSchema,
+    NoteRequestUpdateSchema,
+)
 
 router = APIRouter()
 
@@ -65,6 +70,15 @@ async def get_note(note_id: int, db: AsyncSession = Depends(get_db)):
         raise HTTPException(
             status_code=404, detail="Note with the given ID was not found."
         )
+    return note
+
+
+@router.post("/notes/", response_model=NoteRequestCreateSchema)
+async def create_note(note_data: NoteRequestCreateSchema, db: AsyncSession = Depends(get_db)):
+    note = NoteModel(**note_data.model_dump())
+    db.add(note)
+    await db.commit()
+    await db.refresh(note)
     return note
 
 
