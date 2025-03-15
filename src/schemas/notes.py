@@ -15,9 +15,6 @@ class NoteDetailResponseSchema(BaseModel):
     updated_at: datetime
     versions: List["NoteVersionListResponseSchema"]
 
-    class Config:
-        orm_mode = True
-
 
 class NoteListResponseSchema(BaseModel):
     """Schema for paginated note list response."""
@@ -27,9 +24,6 @@ class NoteListResponseSchema(BaseModel):
     next_page: Optional[str] = Field(None, description="URL for next page")
     total_pages: int = Field(..., description="Total number of pages")
     total_items: int = Field(..., description="Total number of notes")
-
-    class Config:
-        orm_mode = True
 
 
 class NoteRequestCreateSchema(BaseModel):
