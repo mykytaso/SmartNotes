@@ -90,3 +90,6 @@ fabric.properties
 !.idea/runConfigurations
 
 notes.db
+
+.venv
+venv
