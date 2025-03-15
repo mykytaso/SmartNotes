@@ -3,13 +3,13 @@ from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from database import get_db, NoteModel
-from schemas import NoteVersionListResponseSchema
-from schemas.notes import (
+from database import get_db, NoteModel, NoteVersionModel
+from schemas import (
     NoteListResponseSchema,
     NoteDetailResponseSchema,
-    NoteRequestCreateSchema,
-    NoteRequestUpdateSchema,
+    NoteCreateRequestSchema,
+    NoteUpdateRequestSchema,
+    NoteVersionListResponseSchema,
 )
 
 router = APIRouter()
@@ -75,44 +75,53 @@ async def get_note(note_id: int, db: AsyncSession = Depends(get_db)):
 
 @router.post("/notes/", response_model=NoteDetailResponseSchema)
 async def create_note(
-    note_data: NoteRequestCreateSchema, db: AsyncSession = Depends(get_db)
+    note_data: NoteCreateRequestSchema, db: AsyncSession = Depends(get_db)
 ):
     note = NoteModel(**note_data.model_dump())
     db.add(note)
     await db.commit()
     await db.refresh(note)
+
+    # Add an empty list of versions to the note object.
+    # I'm new to FastAPI (<24h experience), so this is my best approach for now.
+    note.__dict__["versions"] = []
+
     return note
 
 
 @router.put("/notes/{note_id}/", response_model=NoteDetailResponseSchema)
 async def update_note(
-    note_id: int, note_data: NoteRequestUpdateSchema, db: AsyncSession = Depends(get_db)
+    note_id: int, note_data: NoteUpdateRequestSchema, db: AsyncSession = Depends(get_db)
 ):
-    result = await db.execute(
-        select(NoteModel)
-        .where(NoteModel.id == note_id)
-        .options(selectinload(NoteModel.versions))
-    )
-    note = result.scalar_one_or_none()
-    if not note:
-        raise HTTPException(
-            status_code=404, detail="Note with the given ID was not found."
-        )
+    note = await get_note(note_id, db)
 
+    # Check the latest version of the note
+    latest_version_result = await db.execute(
+        select(func.max(NoteVersionModel.version)).where(
+            NoteVersionModel.note_id == note_id
+        )
+    )
+    latest_version = latest_version_result.scalar() or 0
+
+    # Store the version of the note
+    note_version = NoteVersionModel(
+        note_id=note_id, content=note.content, version=latest_version + 1
+    )
+
+    # Update the note content
     note.content = note_data.content
+
+    # Save both changes (note and its version) in a single transaction
+    db.add(note_version)
     await db.commit()
     await db.refresh(note)
+
     return note
 
 
 @router.delete("/notes/{note_id}/")
 async def delete_note(note_id: int, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(NoteModel).where(NoteModel.id == note_id))
-    note = result.scalar_one_or_none()
-    if not note:
-        raise HTTPException(
-            status_code=404, detail="Note with the given ID was not found."
-        )
+    note = await get_note(note_id, db)
 
     await db.delete(note)
     await db.commit()
