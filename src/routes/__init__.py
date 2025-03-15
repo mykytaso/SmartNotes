@@ -1,0 +1,1 @@
+from routes.notes import router as note_router
