@@ -19,16 +19,16 @@ class NoteModel(Base):
         DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
     )
 
-    versions: Mapped[List["NoteVersionModel"]] = relationship(back_populates="note")
+    versions: Mapped[List["NoteVersionModel"]] = relationship(back_populates="note", cascade="all, delete-orphan")
 
 
 class NoteVersionModel(Base):
     __tablename__ = "note_versions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    note_id: Mapped[int] = mapped_column(ForeignKey("notes.id", ondelete="CASCADE"))
     version: Mapped[int] = mapped_column(Integer, nullable=False)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-    note: Mapped["NoteModel"] = relationship("NoteModel", back_populates="versions")
+    note_id: Mapped[int] = mapped_column(ForeignKey("notes.id"))
+    note: Mapped["NoteModel"] = relationship(back_populates="versions")
