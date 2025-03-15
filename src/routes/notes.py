@@ -1,3 +1,5 @@
+from datetime import datetime, UTC
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -187,6 +189,11 @@ async def delete_version(
 ):
     version = await get_version(note_id, version_id, db)
 
+    # Update the note updated_at field because its version was deleted
+    note = await get_note(note_id, db)
+    note.updated_at = datetime.now(tz=UTC)
+
+    db.add(note)
     await db.delete(version)
     await db.commit()
     return {"message": "Version deleted successfully."}
