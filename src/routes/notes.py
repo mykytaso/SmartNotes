@@ -10,6 +10,7 @@ from schemas import (
     NoteCreateRequestSchema,
     NoteUpdateRequestSchema,
     VersionListResponseSchema,
+    VersionDetailResponseSchema,
 )
 
 router = APIRouter()
@@ -97,9 +98,7 @@ async def update_note(
 
     # Check the latest version of the note
     latest_version_result = await db.execute(
-        select(func.max(VersionModel.version)).where(
-            VersionModel.note_id == note_id
-        )
+        select(func.max(VersionModel.version)).where(VersionModel.note_id == note_id)
     )
     latest_version = latest_version_result.scalar() or 0
 
@@ -159,3 +158,35 @@ async def get_versions(
         "total_pages": total_pages,
         "total_items": total_versions,
     }
+
+
+@router.get(
+    "/notes/{note_id}/versions/{version_id}", response_model=VersionDetailResponseSchema
+)
+async def get_version(
+    note_id: int, version_id: int, db: AsyncSession = Depends(get_db)
+):
+
+    result = await db.execute(
+        select(VersionModel)
+        .where(VersionModel.note_id == note_id)
+        .where(VersionModel.version == version_id)
+    )
+
+    version = result.scalar_one_or_none()
+    if not version:
+        raise HTTPException(
+            status_code=404, detail="Version with the given ID was not found."
+        )
+    return version
+
+
+@router.delete("/notes/{note_id}/versions/{version_id}")
+async def delete_version(
+    note_id: int, version_id: int, db: AsyncSession = Depends(get_db)
+):
+    version = await get_version(note_id, version_id, db)
+
+    await db.delete(version)
+    await db.commit()
+    return {"message": "Version deleted successfully."}
