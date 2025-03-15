@@ -73,8 +73,10 @@ async def get_note(note_id: int, db: AsyncSession = Depends(get_db)):
     return note
 
 
-@router.post("/notes/", response_model=NoteRequestCreateSchema)
-async def create_note(note_data: NoteRequestCreateSchema, db: AsyncSession = Depends(get_db)):
+@router.post("/notes/", response_model=NoteDetailResponseSchema)
+async def create_note(
+    note_data: NoteRequestCreateSchema, db: AsyncSession = Depends(get_db)
+):
     note = NoteModel(**note_data.model_dump())
     db.add(note)
     await db.commit()
