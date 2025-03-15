@@ -84,6 +84,27 @@ async def create_note(
     return note
 
 
+@router.put("/notes/{note_id}/", response_model=NoteDetailResponseSchema)
+async def update_note(
+    note_id: int, note_data: NoteRequestUpdateSchema, db: AsyncSession = Depends(get_db)
+):
+    result = await db.execute(
+        select(NoteModel)
+        .where(NoteModel.id == note_id)
+        .options(selectinload(NoteModel.versions))
+    )
+    note = result.scalar_one_or_none()
+    if not note:
+        raise HTTPException(
+            status_code=404, detail="Note with the given ID was not found."
+        )
+
+    note.content = note_data.content
+    await db.commit()
+    await db.refresh(note)
+    return note
+
+
 @router.get("/notes/{note_id}/versions/", response_model=NoteVersionListResponseSchema)
 async def get_note_versions(
     note_id: int,
