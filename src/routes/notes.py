@@ -105,6 +105,20 @@ async def update_note(
     return note
 
 
+@router.delete("/notes/{note_id}/")
+async def delete_note(note_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(NoteModel).where(NoteModel.id == note_id))
+    note = result.scalar_one_or_none()
+    if not note:
+        raise HTTPException(
+            status_code=404, detail="Note with the given ID was not found."
+        )
+
+    await db.delete(note)
+    await db.commit()
+    return {"message": "Note deleted successfully."}
+
+
 @router.get("/notes/{note_id}/versions/", response_model=NoteVersionListResponseSchema)
 async def get_note_versions(
     note_id: int,
