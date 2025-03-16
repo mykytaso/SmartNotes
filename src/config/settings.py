@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     PATH_TO_DB: str = str(BASE_DIR / "database" / "source" / "notes.db")
     DEBUG: bool = False
     GENAI_API_KEY: str = ""
+    GENAI_MODEL: str = "gemini-2.0-flash"
 
     class Config:
         env_file = str(Path(__file__).parent.parent.parent / ".env")
