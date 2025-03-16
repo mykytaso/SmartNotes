@@ -19,7 +19,9 @@ class NoteModel(Base):
         DateTime, default=datetime.now(tz=UTC), onupdate=datetime.now(tz=UTC)
     )
 
-    versions: Mapped[List["VersionModel"]] = relationship(back_populates="note", cascade="all, delete-orphan")
+    versions: Mapped[List["VersionModel"]] = relationship(
+        back_populates="note", cascade="all, delete-orphan"
+    )
 
 
 class VersionModel(Base):
