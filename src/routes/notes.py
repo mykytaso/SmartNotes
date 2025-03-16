@@ -12,6 +12,7 @@ from schemas import (
     NoteCreateRequestSchema,
     NoteUpdateRequestSchema,
 )
+from services import genai_summarize
 
 router = APIRouter()
 
@@ -149,3 +150,17 @@ async def delete_note(note_id: int, db: AsyncSession = Depends(get_db)):
     await db.delete(note)
     await db.commit()
     return {"message": "Note deleted successfully."}
+
+
+@router.get("/notes/{note_id}/summary")
+async def get_note_summary(
+    note_id: int, max_words: int = 10, db: AsyncSession = Depends(get_db)
+):
+    """
+    Generate a summary of a note by ID with a maximum number of words.
+    Returns the summary of the note.
+    """
+    note = await retrieve_note(note_id, db)
+    summary = await genai_summarize(note.content, max_words)
+
+    return {"summary": summary}
