@@ -4,6 +4,13 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 
+class BaseModelPaginated(BaseModel):
+    prev_page: Optional[str] = Field(None, description="URL for previous page")
+    next_page: Optional[str] = Field(None, description="URL for next page")
+    total_pages: int = Field(..., description="Total number of pages")
+    total_items: int = Field(..., description="Total number of notes")
+
+
 class NoteDetailResponseSchema(BaseModel):
     """Schema for note detail response."""
 
@@ -14,14 +21,10 @@ class NoteDetailResponseSchema(BaseModel):
     versions: List["VersionDetailResponseSchema"]
 
 
-class NoteListResponseSchema(BaseModel):
+class NoteListResponseSchema(BaseModelPaginated):
     """Schema for paginated note list response."""
 
     notes: List[NoteDetailResponseSchema]
-    prev_page: Optional[str] = Field(None, description="URL for previous page")
-    next_page: Optional[str] = Field(None, description="URL for next page")
-    total_pages: int = Field(..., description="Total number of pages")
-    total_items: int = Field(..., description="Total number of notes")
 
 
 class NoteCreateRequestSchema(BaseModel):
@@ -46,11 +49,7 @@ class VersionDetailResponseSchema(BaseModel):
     created_at: datetime
 
 
-class VersionListResponseSchema(BaseModel):
+class VersionListResponseSchema(BaseModelPaginated):
     """Schema for paginated note version list response."""
 
     versions: List[VersionDetailResponseSchema]
-    prev_page: Optional[str] = Field(None, description="URL for previous page")
-    next_page: Optional[str] = Field(None, description="URL for next page")
-    total_pages: int = Field(..., description="Total number of pages")
-    total_items: int = Field(..., description="Total number of versions")
