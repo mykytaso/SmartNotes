@@ -93,3 +93,5 @@ notes.db
 
 .venv
 venv
+
+.env
