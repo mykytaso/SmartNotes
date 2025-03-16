@@ -83,13 +83,13 @@ async def create_note(
     note = NoteModel(**note_data.model_dump())
     db.add(note)
     await db.commit()
-    await db.refresh(note)
 
-    # Add an empty list of versions to the note object.
-    # I'm new to FastAPI (<24h experience), so this is my best approach for now.
-    note.__dict__["versions"] = []
-
-    return note
+    result = await db.execute(
+        select(NoteModel)
+        .where(NoteModel.id == note.id)
+        .options(selectinload(NoteModel.versions))
+    )
+    return result.scalar_one()
 
 
 @router.put("/notes/{note_id}/", response_model=NoteDetailResponseSchema)
