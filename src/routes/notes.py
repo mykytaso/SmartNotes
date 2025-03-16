@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-import pandas as pd
 
 from database import get_db, NoteModel, VersionModel
 from schemas import (
@@ -165,19 +164,3 @@ async def get_note_summary(
     summary = await genai_summarize(note.content, max_words)
 
     return {"summary": summary}
-
-
-@router.get("/notes/word-count")
-async def get_total_word_count(db: AsyncSession = Depends(get_db)):
-    """
-    Calculate the total word count across all notes in the database.
-    """
-    result = await db.execute(select(NoteModel.content))
-    notes = result.scalars().all()
-
-    if not notes:
-        raise HTTPException(status_code=404, detail="No notes found.")
-
-    total_word_count = sum(len(note.split()) for note in notes)
-
-    return {"total_word_count": total_word_count}

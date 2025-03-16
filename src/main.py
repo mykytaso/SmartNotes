@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from database import init_db, close_db
-from routes import note_router, version_router
+from routes import note_router, version_router, analytics_router
 
 
 @asynccontextmanager
@@ -23,3 +23,4 @@ api_version_prefix = "/api/v1"
 
 app.include_router(note_router, prefix=f"{api_version_prefix}")
 app.include_router(version_router, prefix=f"{api_version_prefix}")
+app.include_router(analytics_router, prefix=f"{api_version_prefix}")
