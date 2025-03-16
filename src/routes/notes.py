@@ -24,6 +24,10 @@ async def get_notes(
     per_page: int = Query(10, ge=1, le=20),
     db: AsyncSession = Depends(get_db),
 ):
+    """
+    Retrieve a paginated list of notes with their versions.
+    Returns a list of notes with pagination metadata.
+    """
     offset = (page - 1) * per_page
 
     result = await db.execute(
@@ -63,6 +67,10 @@ async def get_notes(
 
 @router.get("/notes/{note_id}/", response_model=NoteDetailResponseSchema)
 async def get_note(note_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Retrieve a single note by ID.
+    Returns the note with the given ID.
+    """
     result = await db.execute(
         select(NoteModel)
         .where(NoteModel.id == note_id)
@@ -80,10 +88,15 @@ async def get_note(note_id: int, db: AsyncSession = Depends(get_db)):
 async def create_note(
     note_data: NoteCreateRequestSchema, db: AsyncSession = Depends(get_db)
 ):
+    """
+    Create a new note.
+    Returns the newly created note.
+    """
     note = NoteModel(**note_data.model_dump())
     db.add(note)
     await db.commit()
 
+    # Refresh with explicit relationship loading
     result = await db.execute(
         select(NoteModel)
         .where(NoteModel.id == note.id)
@@ -96,6 +109,11 @@ async def create_note(
 async def update_note(
     note_id: int, note_data: NoteUpdateRequestSchema, db: AsyncSession = Depends(get_db)
 ):
+    """
+    Update an existing note by ID.
+    Creates a new version with the previous note content and updates the note with new content.
+    Returns the updated note with its versions.
+    """
     note = await get_note(note_id, db)
 
     # Check the latest version of the note
@@ -105,15 +123,18 @@ async def update_note(
     latest_version = latest_version_result.scalar() or 0
 
     # Store the version of the note
-    note_version = VersionModel(
-        note_id=note_id, content=note.content, version=latest_version + 1
+    version = VersionModel(
+        note_id=note_id,
+        content=note.content,
+        version=latest_version + 1,
+        created_at=note.updated_at,
     )
 
-    # Update the note content
+    # Update the note content and updated_at
     note.content = note_data.content
+    note.updated_at = datetime.now(tz=UTC)
 
-    # Save both changes (note and its version) in a single transaction
-    db.add(note_version)
+    db.add(version)
     await db.commit()
     await db.refresh(note)
 
@@ -122,6 +143,9 @@ async def update_note(
 
 @router.delete("/notes/{note_id}/")
 async def delete_note(note_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Delete a note by ID.
+    """
     note = await get_note(note_id, db)
 
     await db.delete(note)
@@ -136,6 +160,10 @@ async def get_versions(
     per_page: int = Query(10, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
 ):
+    """
+    Retrieve a paginated list of versions by note ID.
+    Returns a list of versions with pagination metadata.
+    """
     note = await get_note(note_id, db)
 
     versions = note.versions
@@ -168,6 +196,10 @@ async def get_versions(
 async def get_version(
     note_id: int, version_id: int, db: AsyncSession = Depends(get_db)
 ):
+    """
+    Retrieve a single version of a note by note ID and version ID.
+    Returns the version.
+    """
 
     result = await db.execute(
         select(VersionModel)
@@ -187,13 +219,11 @@ async def get_version(
 async def delete_version(
     note_id: int, version_id: int, db: AsyncSession = Depends(get_db)
 ):
+    """
+    Delete a version of a note by note ID and version ID.
+    """
     version = await get_version(note_id, version_id, db)
 
-    # Update the note updated_at field because its version was deleted
-    note = await get_note(note_id, db)
-    note.updated_at = datetime.now(tz=UTC)
-
-    db.add(note)
     await db.delete(version)
     await db.commit()
     return {"message": "Version deleted successfully."}
