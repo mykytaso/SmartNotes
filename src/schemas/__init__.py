@@ -3,6 +3,9 @@ from schemas.notes import (
     NoteListResponseSchema,
     NoteCreateRequestSchema,
     NoteUpdateRequestSchema,
+)
+
+from schemas.versions import (
     VersionDetailResponseSchema,
     VersionListResponseSchema,
 )
