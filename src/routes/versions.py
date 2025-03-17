@@ -12,7 +12,7 @@ from schemas import (
 router = APIRouter()
 
 
-@router.get("/notes/{note_id}/versions/", response_model=VersionListResponseSchema)
+@router.get("/{note_id}", response_model=VersionListResponseSchema)
 async def get_version_list(
     note_id: int,
     page: int = Query(1, ge=1),
@@ -50,7 +50,7 @@ async def get_version_list(
 
 
 @router.get(
-    "/notes/{note_id}/versions/{version_id}", response_model=VersionDetailResponseSchema
+    "/{note_id}/{version_id}", response_model=VersionDetailResponseSchema
 )
 async def retrieve_version(
     note_id: int, version_id: int, db: AsyncSession = Depends(get_db)
@@ -74,7 +74,7 @@ async def retrieve_version(
     return version
 
 
-@router.delete("/notes/{note_id}/versions/{version_id}")
+@router.delete("/{note_id}/{version_id}")
 async def delete_version(
     note_id: int, version_id: int, db: AsyncSession = Depends(get_db)
 ):
