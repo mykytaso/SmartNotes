@@ -21,6 +21,6 @@ app = FastAPI(
 
 api_version_prefix = "/api/v1"
 
-app.include_router(note_router, prefix=f"{api_version_prefix}")
-app.include_router(version_router, prefix=f"{api_version_prefix}")
-app.include_router(analytics_router, prefix=f"{api_version_prefix}")
+app.include_router(note_router, prefix=f"{api_version_prefix}/notes")
+app.include_router(version_router, prefix=f"{api_version_prefix}/versions")
+app.include_router(analytics_router, prefix=f"{api_version_prefix}/analytics")
