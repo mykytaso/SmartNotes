@@ -71,7 +71,7 @@ async def get_note_list(
     }
 
 
-@router.get("{note_id}/", response_model=NoteDetailResponseSchema)
+@router.get("/{note_id}", response_model=NoteDetailResponseSchema)
 async def retrieve_note(note_id: int, db: AsyncSession = Depends(get_db)):
     """
     Retrieve a single note by ID.
