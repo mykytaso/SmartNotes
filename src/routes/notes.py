@@ -19,12 +19,19 @@ router = APIRouter()
 @router.get("/", response_model=NoteListResponseSchema)
 async def get_note_list(
     page: int = Query(1, ge=1),
-    per_page: int = Query(10, ge=1, le=20),
+    per_page: int = Query(10, ge=1, le=50),
     db: AsyncSession = Depends(get_db),
 ):
     """
-    Retrieve a paginated list of notes with their versions.
-    Returns a list of notes with pagination metadata.
+    Retrieve a paginated list of notes.
+
+    Args:
+        page (int): The page number to retrieve (default: 1).
+        per_page (int): The number of items per page (default: 10, max: 50).
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        A paginated list of notes with pagination metadata.
     """
     offset = (page - 1) * per_page
 
@@ -67,7 +74,13 @@ async def get_note_list(
 async def retrieve_note(note_id: int, db: AsyncSession = Depends(get_db)):
     """
     Retrieve a single note by ID.
-    Returns the note with the given ID.
+
+    Args:
+        note_id (int): The ID of the note to retrieve.
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        The note with the given ID.
     """
     result = await db.execute(
         select(NoteModel)
@@ -88,7 +101,13 @@ async def create_note(
 ):
     """
     Create a new note.
-    Returns the newly created note.
+
+    Args:
+        note_data (NoteCreateRequestSchema): The data for the new note.
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        The newly created note with an empty list of versions.
     """
     note = NoteModel(**note_data.model_dump())
     db.add(note)
@@ -108,9 +127,15 @@ async def update_note(
     note_id: int, note_data: NoteUpdateRequestSchema, db: AsyncSession = Depends(get_db)
 ):
     """
-    Update an existing note by ID.
-    Creates a new version with the previous note content and updates the note with new content.
-    Returns the updated note with its versions.
+    Update a note by its ID, creating a new version of the existing note.
+
+    Args:
+        note_id (int): The ID of the note to update.
+        note_data (NoteUpdateRequestSchema): The updated note data.
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        The updated note, with a new version preserving the previous content.
     """
     note = await retrieve_note(note_id, db)
 
@@ -142,7 +167,14 @@ async def update_note(
 @router.delete("/{note_id}")
 async def delete_note(note_id: int, db: AsyncSession = Depends(get_db)):
     """
-    Delete a note by ID.
+    Delete a note by its ID.
+
+    Args:
+        note_id (int): The ID of the note to delete.
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        A message indicating the note was deleted successfully.
     """
     note = await retrieve_note(note_id, db)
 
