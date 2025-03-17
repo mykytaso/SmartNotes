@@ -31,6 +31,7 @@ async def get_version_list(
     Returns:
         A paginated list of versions with pagination metadata.
     """
+
     note = await retrieve_note(note_id, db)
 
     versions = note.versions
@@ -86,6 +87,7 @@ async def retrieve_version(
         raise HTTPException(
             status_code=404, detail="Version with the given ID was not found."
         )
+
     return version
 
 
@@ -104,8 +106,10 @@ async def delete_version(
     Returns:
         A message indicating the version was deleted successfully
     """
+
     version = await retrieve_version(note_id, version_id, db)
 
     await db.delete(version)
     await db.commit()
+
     return {"message": "Version deleted successfully."}

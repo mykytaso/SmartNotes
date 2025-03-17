@@ -33,6 +33,7 @@ async def get_note_list(
     Returns:
         A paginated list of notes with pagination metadata.
     """
+
     offset = (page - 1) * per_page
 
     result = await db.execute(
@@ -82,6 +83,7 @@ async def retrieve_note(note_id: int, db: AsyncSession = Depends(get_db)):
     Returns:
         The note with the given ID.
     """
+
     result = await db.execute(
         select(NoteModel)
         .where(NoteModel.id == note_id)
@@ -92,6 +94,7 @@ async def retrieve_note(note_id: int, db: AsyncSession = Depends(get_db)):
         raise HTTPException(
             status_code=404, detail="Note with the given ID was not found."
         )
+
     return note
 
 
@@ -109,6 +112,7 @@ async def create_note(
     Returns:
         The newly created note with an empty list of versions.
     """
+
     note = NoteModel(**note_data.model_dump())
     db.add(note)
     await db.commit()
@@ -119,6 +123,7 @@ async def create_note(
         .where(NoteModel.id == note.id)
         .options(selectinload(NoteModel.versions))
     )
+
     return result.scalar_one()
 
 
@@ -137,6 +142,7 @@ async def update_note(
     Returns:
         The updated note, with a new version preserving the previous content.
     """
+
     note = await retrieve_note(note_id, db)
 
     # Check the latest version of the note
@@ -176,8 +182,10 @@ async def delete_note(note_id: int, db: AsyncSession = Depends(get_db)):
     Returns:
         A message indicating the note was deleted successfully.
     """
+
     note = await retrieve_note(note_id, db)
 
     await db.delete(note)
     await db.commit()
+
     return {"message": "Note deleted successfully."}

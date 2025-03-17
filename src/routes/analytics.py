@@ -27,6 +27,7 @@ async def get_note_summary(
     Returns:
         The summary of the note.
     """
+
     note = await retrieve_note(note_id, db)
     summary = await genai_summarize(note.content, max_words)
 
@@ -44,6 +45,7 @@ async def get_total_words(db: AsyncSession = Depends(get_db)):
     Returns:
         The total word count of all notes in the database.
     """
+
     statement = select(
         func.sum(
             func.length(NoteModel.content)
@@ -68,6 +70,7 @@ async def get_avg_note_length(db: AsyncSession = Depends(get_db)):
     Returns:
         The average note length rounded to 2 decimal places.
     """
+
     statement = select(
         func.sum(func.length(NoteModel.content)) / cast(func.count(NoteModel.id), Float)
     )
