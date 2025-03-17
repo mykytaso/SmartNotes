@@ -3,7 +3,9 @@ import asyncio
 from fastapi import HTTPException
 from google import genai
 
-from config import settings
+from config import get_settings
+
+settings = get_settings()
 
 client = genai.Client(api_key=settings.GENAI_API_KEY)
 

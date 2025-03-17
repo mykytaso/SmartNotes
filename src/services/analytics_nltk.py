@@ -1,11 +1,12 @@
 import string
-from collections import Counter
 
 import nltk
 from nltk import word_tokenize, FreqDist
 from nltk.util import ngrams
 
-from config import settings
+from config import get_settings
+
+settings = get_settings()
 
 
 # # Ensure NLTK looks for data in this directory
@@ -34,6 +35,8 @@ async def get_common_words_phrases(notes, max_phrase_length: int):
         and common not in string.punctuation
         and common
         not in [
-            "'", "’", "—",
+            "'",
+            "’",
+            "—",
         ]
     }
