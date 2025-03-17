@@ -11,10 +11,10 @@ class Settings(BaseSettings):
     BASE_DIR: Path = Path(__file__).parent.parent
     PATH_TO_DB: str = str(BASE_DIR / "database" / "source" / "notes.db")
     NLTK_DATA_PATH: str = str(BASE_DIR.parent / ".venv" / "nltk_data")
-    ENVIRONMENT: str
+    ENVIRONMENT: str = "developing"
     DEBUG: bool = False
-    GENAI_API_KEY: str
-    GENAI_MODEL: str
+    GENAI_API_KEY: str = ""
+    GENAI_MODEL: str = "gemini-2.0-flash"
 
     class Config:
         env_file = str(Path(__file__).parent.parent.parent / ".env")
