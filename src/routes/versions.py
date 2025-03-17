@@ -20,8 +20,16 @@ async def get_version_list(
     db: AsyncSession = Depends(get_db),
 ):
     """
-    Retrieve a paginated list of versions by note ID.
-    Returns a list of versions with pagination metadata.
+    Retrieve a paginated list of versions for a note by note ID.
+
+    Args:
+        note_id (int): The ID of the note to retrieve versions for.
+        page (int): The page number to retrieve (default: 1).
+        per_page (int): The number of items per page (default: 10, max: 100).
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        A paginated list of versions with pagination metadata.
     """
     note = await retrieve_note(note_id, db)
 
@@ -56,8 +64,15 @@ async def retrieve_version(
     note_id: int, version_id: int, db: AsyncSession = Depends(get_db)
 ):
     """
-    Retrieve a single version of a note by note ID and version ID.
-    Returns the version.
+    Retrieve a version of a note by note ID and version ID.
+
+    Args:
+        note_id (int): The ID of the note to retrieve the version for.
+        version_id (int): The ID of the version to retrieve.
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        The version of the note.
     """
 
     result = await db.execute(
@@ -80,6 +95,14 @@ async def delete_version(
 ):
     """
     Delete a version of a note by note ID and version ID.
+
+    Args:
+        note_id (int): The ID of the note to delete the version from.
+        version_id (int): The ID of the version to delete.
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        A message indicating the version was deleted successfully
     """
     version = await retrieve_version(note_id, version_id, db)
 
