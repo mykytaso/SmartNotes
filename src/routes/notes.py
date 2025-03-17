@@ -12,7 +12,6 @@ from schemas import (
     NoteCreateRequestSchema,
     NoteUpdateRequestSchema,
 )
-from services import genai_summarize
 
 router = APIRouter()
 
