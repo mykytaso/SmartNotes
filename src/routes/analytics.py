@@ -1,4 +1,5 @@
 from fastapi import Depends, APIRouter
+from fastapi.params import Query
 from sqlalchemy import select, func, cast, Float
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -9,9 +10,11 @@ from services import get_common_words_phrases, genai_summarize
 router = APIRouter()
 
 
-@router.get("/{note_id}/summary")
+@router.get("/summary")
 async def get_note_summary(
-    note_id: int, max_words: int = 10, db: AsyncSession = Depends(get_db)
+    note_id: int = Query(),
+    max_words: int = Query(10, ge=1),
+    db: AsyncSession = Depends(get_db),
 ):
     """
     Generate a summary of a note by ID with a maximum number of words using the GenAI API.
@@ -78,7 +81,7 @@ async def get_avg_note_length(db: AsyncSession = Depends(get_db)):
 
 @router.get("/most-common-words-or-phrases")
 async def get_most_common_words_or_phrases(
-    max_phrase_length: int = 3, db: AsyncSession = Depends(get_db)
+    max_phrase_length: int = Query(3, ge=1, le=10), db: AsyncSession = Depends(get_db)
 ):
     """
     Extract the most common words or phrases from all notes in the database.
@@ -90,9 +93,6 @@ async def get_most_common_words_or_phrases(
     Returns:
         Common words or phrases (up to 'max_phrase_length' words) that appear at least twice, and their frequencies.
     """
-
-    # Ensure max_phrase_length is between 1 and 10
-    max_phrase_length = min(max(1, max_phrase_length), 10)
 
     result = await db.execute(select(NoteModel.content))
     notes = result.scalars().all()
@@ -113,6 +113,7 @@ async def get_top3_longest_notes(db: AsyncSession = Depends(get_db)):
     Returns:
         The top 3 longest notes.
     """
+
     statement = (
         select(NoteModel).order_by(func.length(NoteModel.content).desc()).limit(3)
     )
@@ -143,6 +144,7 @@ async def get_top3_shortest_notes(db: AsyncSession = Depends(get_db)):
     Returns:
         The top 3 shortest notes.
     """
+
     statement = select(NoteModel).order_by(func.length(NoteModel.content)).limit(3)
     result = await db.execute(statement)
     notes = result.scalars().all()
