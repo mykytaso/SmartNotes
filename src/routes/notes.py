@@ -71,7 +71,7 @@ async def get_note_list(
     }
 
 
-@router.get("/{note_id}", response_model=NoteDetailResponseSchema)
+@router.get("/{note_id}/", response_model=NoteDetailResponseSchema)
 async def retrieve_note(note_id: int, db: AsyncSession = Depends(get_db)):
     """
     Retrieve a single note by ID.
@@ -127,7 +127,7 @@ async def create_note(
     return result.scalar_one()
 
 
-@router.put("/{note_id}", response_model=NoteDetailResponseSchema)
+@router.put("/{note_id}/", response_model=NoteDetailResponseSchema)
 async def update_note(
     note_id: int, note_data: NoteUpdateRequestSchema, db: AsyncSession = Depends(get_db)
 ):
@@ -170,7 +170,7 @@ async def update_note(
     return note
 
 
-@router.delete("/{note_id}")
+@router.delete("/{note_id}/")
 async def delete_note(note_id: int, db: AsyncSession = Depends(get_db)):
     """
     Delete a note by its ID.

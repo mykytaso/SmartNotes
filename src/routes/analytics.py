@@ -10,7 +10,7 @@ from services import get_common_words_phrases, genai_summarize
 router = APIRouter()
 
 
-@router.get("/summary")
+@router.get("/summary/")
 async def get_note_summary(
     note_id: int = Query(),
     max_words: int = Query(10, ge=1),
@@ -34,7 +34,7 @@ async def get_note_summary(
     return {"summary": summary}
 
 
-@router.get("/total-words")
+@router.get("/total-words/")
 async def get_total_words(db: AsyncSession = Depends(get_db)):
     """
     Retrieve the total word count from all notes in the database using SQLAlchemy.
@@ -59,7 +59,7 @@ async def get_total_words(db: AsyncSession = Depends(get_db)):
     return {"total_words": total_words}
 
 
-@router.get("/avg-note-length")
+@router.get("/avg-note-length/")
 async def get_avg_note_length(db: AsyncSession = Depends(get_db)):
     """
     Calculate the average note length across all notes in the database.
@@ -82,7 +82,7 @@ async def get_avg_note_length(db: AsyncSession = Depends(get_db)):
     return {"avg_note_length": avg_note_length_rounded}
 
 
-@router.get("/most-common-words-or-phrases")
+@router.get("/most-common-words-or-phrases/")
 async def get_most_common_words_or_phrases(
     max_phrase_length: int = Query(3, ge=1, le=10), db: AsyncSession = Depends(get_db)
 ):
@@ -105,7 +105,7 @@ async def get_most_common_words_or_phrases(
     return result
 
 
-@router.get("/top3-longest-notes")
+@router.get("/top3-longest-notes/")
 async def get_top3_longest_notes(db: AsyncSession = Depends(get_db)):
     """
     Retrieve the top 3 longest notes in the database.
@@ -136,7 +136,7 @@ async def get_top3_longest_notes(db: AsyncSession = Depends(get_db)):
     return {"top3_longest_notes": notes_with_length}
 
 
-@router.get("/top3-shortest-notes")
+@router.get("/top3-shortest-notes/")
 async def get_top3_shortest_notes(db: AsyncSession = Depends(get_db)):
     """
     Retrieve the top 3 shortest notes in the database.
