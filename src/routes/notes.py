@@ -19,7 +19,7 @@ router = APIRouter()
 @router.get("/", response_model=NoteListResponseSchema)
 async def get_note_list(
     page: int = Query(1, ge=1),
-    per_page: int = Query(10, ge=1, le=100),
+    per_page: int = Query(10, ge=1, le=20),
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -27,7 +27,7 @@ async def get_note_list(
 
     Args:
         page (int): The page number to retrieve (default: 1).
-        per_page (int): The number of items per page (default: 10, max: 100).
+        per_page (int): The number of items per page (default: 10, max: 20).
         db (AsyncSession): Database session dependency.
 
     Returns:
