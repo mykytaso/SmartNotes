@@ -17,7 +17,7 @@ from services import genai_summarize
 router = APIRouter()
 
 
-@router.get("/notes/", response_model=NoteListResponseSchema)
+@router.get("/", response_model=NoteListResponseSchema)
 async def get_note_list(
     page: int = Query(1, ge=1),
     per_page: int = Query(10, ge=1, le=20),
@@ -64,7 +64,7 @@ async def get_note_list(
     }
 
 
-@router.get("/notes/{note_id}/", response_model=NoteDetailResponseSchema)
+@router.get("{note_id}/", response_model=NoteDetailResponseSchema)
 async def retrieve_note(note_id: int, db: AsyncSession = Depends(get_db)):
     """
     Retrieve a single note by ID.
@@ -83,7 +83,7 @@ async def retrieve_note(note_id: int, db: AsyncSession = Depends(get_db)):
     return note
 
 
-@router.post("/notes/", response_model=NoteDetailResponseSchema)
+@router.post("/", response_model=NoteDetailResponseSchema)
 async def create_note(
     note_data: NoteCreateRequestSchema, db: AsyncSession = Depends(get_db)
 ):
@@ -104,7 +104,7 @@ async def create_note(
     return result.scalar_one()
 
 
-@router.put("/notes/{note_id}/", response_model=NoteDetailResponseSchema)
+@router.put("/{note_id}", response_model=NoteDetailResponseSchema)
 async def update_note(
     note_id: int, note_data: NoteUpdateRequestSchema, db: AsyncSession = Depends(get_db)
 ):
@@ -140,7 +140,7 @@ async def update_note(
     return note
 
 
-@router.delete("/notes/{note_id}/")
+@router.delete("/{note_id}")
 async def delete_note(note_id: int, db: AsyncSession = Depends(get_db)):
     """
     Delete a note by ID.
@@ -150,17 +150,3 @@ async def delete_note(note_id: int, db: AsyncSession = Depends(get_db)):
     await db.delete(note)
     await db.commit()
     return {"message": "Note deleted successfully."}
-
-
-@router.get("/notes/{note_id}/summary")
-async def get_note_summary(
-    note_id: int, max_words: int = 10, db: AsyncSession = Depends(get_db)
-):
-    """
-    Generate a summary of a note by ID with a maximum number of words.
-    Returns the summary of the note.
-    """
-    note = await retrieve_note(note_id, db)
-    summary = await genai_summarize(note.content, max_words)
-
-    return {"summary": summary}
