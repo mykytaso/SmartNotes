@@ -100,3 +100,61 @@ async def get_most_common_words_or_phrases(
     result = await get_common_words_phrases(notes, max_phrase_length)
 
     return result
+
+
+@router.get("/top3-longest-notes")
+async def get_top3_longest_notes(db: AsyncSession = Depends(get_db)):
+    """
+    Retrieve the top 3 longest notes in the database.
+
+    Args:
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        The top 3 longest notes.
+    """
+    statement = (
+        select(NoteModel).order_by(func.length(NoteModel.content).desc()).limit(3)
+    )
+    result = await db.execute(statement)
+    notes = result.scalars().all()
+
+    # Add length information to each note
+    notes_with_length = [
+        {
+            "id": note.id,
+            "length": len(note.content),
+            "content": note.content,
+        }
+        for note in notes
+    ]
+
+    return {"top3_longest_notes": notes_with_length}
+
+
+@router.get("/top3-shortest-notes")
+async def get_top3_shortest_notes(db: AsyncSession = Depends(get_db)):
+    """
+    Retrieve the top 3 shortest notes in the database.
+
+    Args:
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        The top 3 shortest notes.
+    """
+    statement = select(NoteModel).order_by(func.length(NoteModel.content)).limit(3)
+    result = await db.execute(statement)
+    notes = result.scalars().all()
+
+    # Add length information to each note
+    notes_with_length = [
+        {
+            "id": note.id,
+            "length": len(note.content),
+            "content": note.content,
+        }
+        for note in notes
+    ]
+
+    return {"top3_shortest_notes": notes_with_length}
