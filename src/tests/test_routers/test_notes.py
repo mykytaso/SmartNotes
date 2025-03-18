@@ -5,6 +5,9 @@ from sqlalchemy import select, func
 from database import NoteModel
 
 
+random_id = random.randint(1, 10)
+
+
 @pytest.mark.asyncio
 async def test_get_notes_empty_database(client):
     """
@@ -27,7 +30,7 @@ async def test_get_notes_empty_database(client):
 
 
 @pytest.mark.asyncio
-async def test_get_notes_default_parameters(client, populate_test_notes):
+async def test_get_notes_default_parameters(client, populate_test_10_notes):
     """
     Test retrieving notes with default pagination parameters.
 
@@ -49,7 +52,7 @@ async def test_get_notes_default_parameters(client, populate_test_notes):
 
 
 @pytest.mark.asyncio
-async def test_get_notes_with_custom_parameters(client, populate_test_notes):
+async def test_get_notes_with_custom_parameters(client, populate_test_10_notes):
     """
     Test retrieving notes with custom pagination parameters.
 
@@ -101,7 +104,7 @@ async def test_invalid_page_and_per_page(client, page, per_page, expected_detail
 
 
 @pytest.mark.asyncio
-async def test_per_page_maximum_allowed_value(client, populate_test_notes):
+async def test_per_page_maximum_allowed_value(client, populate_test_10_notes):
     """
     Test retrieving notes with the maximum allowed `per_page` value.
 
@@ -118,7 +121,7 @@ async def test_per_page_maximum_allowed_value(client, populate_test_notes):
 
 
 @pytest.mark.asyncio
-async def test_page_exceeds_maximum(client, db_session, populate_test_notes):
+async def test_page_exceeds_maximum(client, db_session, populate_test_10_notes):
     """
     Test retrieving a page number that exceeds the total available pages.
 
@@ -153,7 +156,7 @@ async def test_get_note_by_id_not_found(client):
 
 
 @pytest.mark.asyncio
-async def test_get_note_by_id_valid(client, db_session, populate_test_notes):
+async def test_get_note_by_id_valid(client, db_session, populate_test_10_notes):
     """
     Test retrieving a valid note by ID.
 
@@ -161,17 +164,6 @@ async def test_get_note_by_id_valid(client, db_session, populate_test_notes):
         - 200 response status code.
         - JSON response containing the correct note details.
     """
-    min_id = (
-        (await db_session.execute(select(NoteModel.id).order_by(NoteModel.id.asc())))
-        .scalars()
-        .first()
-    )
-    max_id = (
-        (await db_session.execute(select(NoteModel.id).order_by(NoteModel.id.desc())))
-        .scalars()
-        .first()
-    )
-    random_id = random.randint(min_id, max_id)
 
     expected_note = await db_session.get(NoteModel, random_id)
     assert expected_note is not None
@@ -185,7 +177,7 @@ async def test_get_note_by_id_valid(client, db_session, populate_test_notes):
 
 
 @pytest.mark.asyncio
-async def test_update_note(client, db_session, populate_test_notes):
+async def test_update_note(client, populate_test_10_notes):
     """
     Test updating a note by ID and verify that a new note version is automatically created.
 
@@ -206,3 +198,26 @@ async def test_update_note(client, db_session, populate_test_notes):
     assert (
         response_updated.json()["versions"][0]["content"] == response.json()["content"]
     )
+
+
+@pytest.mark.asyncio
+async def test_delete_note(client, db_session, populate_test_10_notes):
+    """
+    Test delete a note by ID.
+
+    Expected:
+        - 200 response status code.
+        - JSON response with a "Note deleted successfully." message.
+    """
+    total_notes = await db_session.scalar(select(func.count()).select_from(NoteModel))
+
+    response_delete = await client.delete(f"/api/v1/notes/{random_id}/")
+
+    assert response_delete.status_code == 200
+    assert response_delete.json() == {"message": "Note deleted successfully."}
+
+    number_of_notes_after_delete = await db_session.scalar(
+        select(func.count()).select_from(NoteModel)
+    )
+
+    assert number_of_notes_after_delete == total_notes - 1

@@ -43,7 +43,7 @@ async def db_session():
 
 
 @pytest.fixture
-async def populate_test_notes(db_session):
+async def populate_test_10_notes(db_session):
 
     notes = [NoteModel(content=f"Content {i}") for i in range(1, 11)]
     db_session.add_all(notes)
