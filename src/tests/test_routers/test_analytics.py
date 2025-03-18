@@ -122,8 +122,8 @@ async def test_avg_note_length_no_notes(client):
 
     response = await client.get("/api/v1/analytics/avg-note-length/")
 
-    assert response.status_code == 200
-    assert response.json()["avg_note_length"] == 0
+    assert response.status_code == 404
+    assert response.json() == {"detail": "There are no notes in the database."}
 
 
 @pytest.mark.asyncio
