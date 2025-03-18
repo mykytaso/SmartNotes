@@ -1,27 +1,73 @@
 # Notes Management System API
 
-## API service for notes management with analytics and AI summarization.
+## An API service for managing notes with analytics and AI-powered summarization.
 
-Notes Management System – allows users to create, edit, and delete notes.
-During note updates, it automatically stores the previous version of the note.
-Integrated with an AI summarization service to provide summaries of notes.
-Provides analytics such as:
-	•	Total word count across all notes
-	•	Average note length
-	•	Most common words or phrases
-	•	Identifies the top 3 longest and shortest notes
-
-
-### Technologies
-- FastAPI
-- AQLAlchemy
-- Alembic
-- Pydantic
-- NLTK
-- Gemini API
-- Asyncio
+- Notes Management System – allows to create, edit, and delete notes.
+- Automatic versioning: stores previous versions of notes during updates.
+- AI summarization powered by Gemini API.
+- Analytics:
+  - Total word count across all notes
+  - Average note length
+  - Most common words or phrases
+  - Identifies the top 3 longest and shortest notes
 
 
+### Technologies Used
+- **FastAPI** – Asynchronous web framework. 
+- **Alchemy** – ORM for database interaction.
+- **Alembic** – Database migrations.
+- **Pydantic** – Data validation and serialization.
+- **NLTK** – Natural language processing.
+- **Gemini API** – AI summarization service.
+- **Asyncio** – Asynchronous programming.
+
+
+## 📋 &nbsp; Project Structure Overview
+
+The project is structured to facilitate modular development and ease of maintenance.
+
+```
+.
+├── .env.sample
+├── .gitignore
+├── pytest.ini
+├── README.md
+├── requirements.txt
+├── media
+└── src
+    ├── config
+    │   ├── __init__.py
+    │   └── settings.py
+    ├── database
+    │   ├── __init__.py
+    │   ├── models.py
+    │   ├── session.py
+    │   └── source
+    │       └── notes.db
+    ├── main.py
+    ├── routes
+    │   ├── __init__.py
+    │   ├── analytics.py
+    │   ├── notes.py
+    │   └── versions.py
+    ├── schemas
+    │   ├── __init__.py
+    │   ├── notes.py
+    │   └── versions.py
+    ├── services
+    │   ├── __init__.py
+    │   ├── analytics.py
+    │   └── genai.py
+    └── tests
+        ├── __init__.py
+        ├── conftest.py
+        └── test
+            ├── __init__.py
+            ├── test_analytics.py
+            ├── test_notes.py
+            └── test_versions.py
+            
+```
 
 
 ## 📦 &nbsp; Installation
@@ -36,7 +82,10 @@ Provides analytics such as:
     
 2. Please make sure to set `src` directory as Source Root in your IDE.
     
-    
+    <img src="media/src.png" alt="ModHeader" width="460"/>
+
+
+
 3. Create and activate virtual environment:
     ```shell
     python3 -m venv .venv
@@ -51,11 +100,22 @@ Provides analytics such as:
    pip install -r requirements.txt
     ```
 
-4. Set up environment variables:
+6. Set up environment variables:
    - Create a `.env` file.
    - Copy the content from `.env.sample` to `.env`.
    - Update the values in `.env` with your specific configuration.
 
+
+7.  Run the application (please run the following commands in your terminal):
+    
+    ```shell
+    # Go to the `src` directory:
+    cd src
+    ```
+    ```shell
+    # Run the application:
+    uvicorn main:app --reload
+    ```
 
 <br>
 
@@ -94,6 +154,11 @@ The project includes comprehensive unit and integration tests using `pytest`.<br
 Currently, **86%** of the codebase is covered by tests.
 
 **⚠️ IMPORTANT**: Make sure to set the environment variable `ENVIRONMENT=testing` in the `.env` file before running tests. This ensures the use of a temporary in-memory database for testing purposes.
+
+To run the tests, execute the following command:
+```shell
+  pytest
+```
 
 <br>
 
