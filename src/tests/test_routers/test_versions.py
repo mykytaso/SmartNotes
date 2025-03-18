@@ -3,7 +3,7 @@ import random
 import pytest
 from sqlalchemy import select, func
 
-from database import NoteModel, VersionModel
+from database import VersionModel
 
 random_id = random.randint(1, 10)
 
