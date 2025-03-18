@@ -123,27 +123,29 @@ The project is structured to facilitate modular development and ease of maintena
 
 ## 📡 &nbsp; Available Endpoints
 
-- `/docs` [GET] – Documentation.
+- `/docs` [GET] – View the API documentation.
 <br>
 
-- `/api/v1/notes` [GET] – List of notes.
-- `/api/v1/notes` [POST] – Create a note.
-- `/api/v1/notes/{id}` [GET] – Retrieve a note.
-- `/api/v1/notes/{id}` [PUT] – Update a note.
-- `/api/v1/notes/{id}` [DELETE] – Delete a note.
+- `/api/v1/notes` [GET] – Retrieve a list of notes.
+- `/api/v1/notes` [POST] – Create a new note.
+- `/api/v1/notes/{id}` [GET] – Retrieve a specific note by ID.
+- `/api/v1/notes/{id}` [PUT] – Update an existing note by ID.
+- `/api/v1/notes/{id}` [DELETE] – Delete a note by ID.
 <br>
 
-- `/api/v1/versions/?note_id={note_id}` [GET] – Get all note versions.
-- `/api/v1/versions/?note_id={note_id}&version_id={version_id}` [GET] – Get a one note version.
-- `/api/v1/versions/?note_id={note_id}&version_id={version_id}` [DELETE] – Delete a note version.
+- `/api/v1/versions/?note_id={note_id}` [GET] – Retrieve all versions of a note.
+- `/api/v1/versions/?note_id={note_id}&version_id={version_id}` [GET] – Retrieve a specific version of a note.
+- `/api/v1/versions/?note_id={note_id}&version_id={version_id}` [DELETE] – Delete a specific version of a note.
 <br>
 
-- `/api/v1/notes/{id}/summary/?max_words={int}` [GET] – Get a summary of a note. Optional parametr max_words is he maximum number of words in the summary (default: 10)
+- `/api/v1/notes/{id}/summary/?max_words={int}` [GET] – Get a summary of a note.
+  - Optional parameter: `max_words` – The maximum number of words in the summary (default: 10).
 - `/api/v1/notes/analytics/total-words` [GET] – Get the total word count across all notes.
-- `/api/v1/notes/analytics/avg-note-length` [GET] – Get the average note length.
-- `/api/v1/notes/analytics/most-common-words-or-phrases/?max_phrase_length={int}` [GET] – Get the most common words or phrases from all notes in the database. Parametr max_phrase_length is the maximum length of phrases to consider, ranging from 1 to 10 words (default: 3 words).
-- `/api/v1/notes/analytics/top-3-longest-notes` [GET] – Get the top 3 longest notes.
-- `/api/v1/notes/analytics/top-3-shortest-notes` [GET] – Get the top 3 shortest notes.
+- `/api/v1/notes/analytics/avg-note-length` [GET] – Get the average length of notes.
+- `/api/v1/notes/analytics/most-common-words-or-phrases/?max_phrase_length={int}` [GET] – Get the most common words or phrases across all notes.
+  - Parameter: `max_phrase_length` – The maximum length of phrases to consider, ranging from 1 to 10 words (default: 3).
+- `/api/v1/notes/analytics/top-3-longest-notes` [GET] – Retrieve the top 3 longest notes.
+- `/api/v1/notes/analytics/top-3-shortest-notes` [GET] – Retrieve the top 3 shortest notes.
 <br>
 
 >**Example:** `http://127.0.0.1:8000/api/v1/notes`
@@ -155,10 +157,12 @@ The project is structured to facilitate modular development and ease of maintena
 - The project includes comprehensive unit and integration tests using `pytest`.
 - Currently, **86%** of the codebase is covered by tests.
 
-> **⚠️ IMPORTANT**: Make sure to set the environment variable `ENVIRONMENT=testing` in the `.env` file before running tests. This ensures the use of a temporary in-memory database for testing purposes.
+<br>
+
+> **⚠️ IMPORTANT**: Set the environment variable `ENVIRONMENT=testing` in the `.env` file before running tests. This ensures that the tests use a **temporary in-memory database**.
 
 
-To run the tests, execute the following command:
+To run the tests, use the following command:
 ```shell
   pytest
 ```
