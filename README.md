@@ -11,6 +11,7 @@
   - Most common words or phrases
   - Identifies the top 3 longest and shortest notes
 
+<br>
 
 ### Technologies Used
 - **FastAPI** – Asynchronous web framework. 
@@ -20,6 +21,8 @@
 - **NLTK** – Natural language processing.
 - **Gemini API** – AI summarization service.
 - **Asyncio** – Asynchronous programming.
+
+<br>
 
 
 ## 📋 &nbsp; Project Structure Overview
@@ -69,10 +72,10 @@ The project is structured to facilitate modular development and ease of maintena
             
 ```
 
+<br>
+
 
 ## 📦 &nbsp; Installation
-
-> **Important:**  Make sure [Docker](https://www.docker.com/) is installed and running.
 
 1. Clone the repository:
     ```shell
@@ -85,28 +88,26 @@ The project is structured to facilitate modular development and ease of maintena
     <img src="media/src.png" alt="ModHeader" width="460"/>
 
 
-
 3. Create and activate virtual environment:
     ```shell
     python3 -m venv .venv
     source .venv/bin/activate
     ```
-      
     
     
-    
-5. Install the required dependencies:
+4. Install the required dependencies:
     ```shell
    pip install -r requirements.txt
     ```
 
-6. Set up environment variables:
+
+5. Set up environment variables:
    - Create a `.env` file.
    - Copy the content from `.env.sample` to `.env`.
    - Update the values in `.env` with your specific configuration.
 
 
-7.  Run the application (please run the following commands in your terminal):
+6.  Run the application (please run the following commands in your terminal):
     
     ```shell
     # Go to the `src` directory:
@@ -120,11 +121,11 @@ The project is structured to facilitate modular development and ease of maintena
 <br>
 
 
-
 ## 📡 &nbsp; Available Endpoints
 
-- Documentation: `/docs`
+- `/docs` [GET] – Documentation.
 <br>
+
 - `/api/v1/notes` [GET] – List of notes.
 - `/api/v1/notes` [POST] – Create a note.
 - `/api/v1/notes/{id}` [GET] – Retrieve a note.
@@ -153,7 +154,7 @@ The project is structured to facilitate modular development and ease of maintena
 The project includes comprehensive unit and integration tests using `pytest`.<br>
 Currently, **86%** of the codebase is covered by tests.
 
-**⚠️ IMPORTANT**: Make sure to set the environment variable `ENVIRONMENT=testing` in the `.env` file before running tests. This ensures the use of a temporary in-memory database for testing purposes.
+> **⚠️ IMPORTANT**: Make sure to set the environment variable `ENVIRONMENT=testing` in the `.env` file before running tests. This ensures the use of a temporary in-memory database for testing purposes.
 
 To run the tests, execute the following command:
 ```shell
@@ -161,14 +162,6 @@ To run the tests, execute the following command:
 ```
 
 <br>
-
-## 👾 &nbsp; Features
-- Asynchronous API
-- AI-powered Summarization of notes
-- Notes Analytics
-- Notes Versioning History to track changes over time
-<br>
-
 
 
 ## ✍️ &nbsp; Author
