@@ -105,8 +105,8 @@ async def get_most_common_words_or_phrases(
     return result
 
 
-@router.get("/top3-longest-notes/")
-async def get_top3_longest_notes(db: AsyncSession = Depends(get_db)):
+@router.get("/top-3-longest-notes/")
+async def get_top_3_longest_notes(db: AsyncSession = Depends(get_db)):
     """
     Retrieve the top 3 longest notes in the database.
 
@@ -136,8 +136,8 @@ async def get_top3_longest_notes(db: AsyncSession = Depends(get_db)):
     return {"top3_longest_notes": notes_with_length}
 
 
-@router.get("/top3-shortest-notes/")
-async def get_top3_shortest_notes(db: AsyncSession = Depends(get_db)):
+@router.get("/top-3-shortest-notes/")
+async def get_top_3_shortest_notes(db: AsyncSession = Depends(get_db)):
     """
     Retrieve the top 3 shortest notes in the database.
 
