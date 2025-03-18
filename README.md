@@ -107,10 +107,10 @@ The project is structured to facilitate modular development and ease of maintena
    - Update the values in `.env` with your specific configuration.
 
 
-6.  **Run the application (please run the following commands in your terminal):**
+6.  **Run the application** (please run the following commands in your `terminal`):
     
     ```shell
-    # Go to the `src` directory:
+    # Go to the src directory:
     cd src
     ```
     ```shell
@@ -144,6 +144,7 @@ The project is structured to facilitate modular development and ease of maintena
 - `/api/v1/notes/analytics/most-common-words-or-phrases/?max_phrase_length={int}` [GET] – Get the most common words or phrases from all notes in the database. Parametr max_phrase_length is the maximum length of phrases to consider, ranging from 1 to 10 words (default: 3 words).
 - `/api/v1/notes/analytics/top-3-longest-notes` [GET] – Get the top 3 longest notes.
 - `/api/v1/notes/analytics/top-3-shortest-notes` [GET] – Get the top 3 shortest notes.
+<br>
 
 >**Example:** `http://127.0.0.1:8000/api/v1/notes`
 
@@ -151,10 +152,11 @@ The project is structured to facilitate modular development and ease of maintena
 
 
 ## 🧪 &nbsp; Testing
-The project includes comprehensive unit and integration tests using `pytest`.<br>
-Currently, **86%** of the codebase is covered by tests.
+- The project includes comprehensive unit and integration tests using `pytest`.
+- Currently, **86%** of the codebase is covered by tests.
 
 > **⚠️ IMPORTANT**: Make sure to set the environment variable `ENVIRONMENT=testing` in the `.env` file before running tests. This ensures the use of a temporary in-memory database for testing purposes.
+
 
 To run the tests, execute the following command:
 ```shell
