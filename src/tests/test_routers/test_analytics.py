@@ -150,9 +150,7 @@ async def test_avg_note_length(client, db_session, populate_test_10_notes):
 
 
 @pytest.mark.asyncio
-async def test_get_top_3_longest_notes(
-    client, populate_test_10_notes_different_length
-):
+async def test_get_top_3_longest_notes(client, populate_test_10_notes_different_length):
     """
     Test top-3-longest-notes endpoint.
 
@@ -173,9 +171,7 @@ async def test_get_top_3_longest_notes(
 
 
 @pytest.mark.asyncio
-async def test_get_top3_shortest_notes(
-    client, populate_test_10_notes_different_length
-):
+async def test_get_top3_shortest_notes(client, populate_test_10_notes_different_length):
     """
     Test top-3-shortest-notes endpoint.
 
