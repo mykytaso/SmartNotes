@@ -159,9 +159,8 @@ async def update_note(
         created_at=note.updated_at,
     )
 
-    # Update the note content and updated_at
+    # Update the note content
     note.content = note_data.content
-    note.updated_at = datetime.now(tz=UTC)
 
     db.add(version)
     await db.commit()
