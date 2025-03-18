@@ -82,8 +82,8 @@ async def test_total_words_no_notes(client):
 
     response = await client.get("/api/v1/analytics/total-words/")
 
-    assert response.status_code == 200
-    assert response.json()["total_words"] == 0
+    assert response.status_code == 404
+    assert response.json()["detail"] == "There are no notes in the database."
 
 
 @pytest.mark.asyncio
