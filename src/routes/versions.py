@@ -35,6 +35,10 @@ async def get_version_list(
     note = await retrieve_note(note_id, db)
 
     versions = note.versions
+
+    if not versions:
+        raise HTTPException(status_code=404, detail="No versions found.")
+
     total_versions = len(versions)
     total_pages = (total_versions + per_page - 1) // per_page
 
@@ -58,9 +62,7 @@ async def get_version_list(
     }
 
 
-@router.get(
-    "/{note_id}/{version_id}", response_model=VersionDetailResponseSchema
-)
+@router.get("/{note_id}/{version_id}", response_model=VersionDetailResponseSchema)
 async def retrieve_version(
     note_id: int, version_id: int, db: AsyncSession = Depends(get_db)
 ):
