@@ -133,7 +133,7 @@ async def get_top_3_longest_notes(db: AsyncSession = Depends(get_db)):
         for note in notes
     ]
 
-    return {"top3_longest_notes": notes_with_length}
+    return {"top_3_longest_notes": notes_with_length}
 
 
 @router.get("/top-3-shortest-notes/")
@@ -162,4 +162,4 @@ async def get_top_3_shortest_notes(db: AsyncSession = Depends(get_db)):
         for note in notes
     ]
 
-    return {"top3_shortest_notes": notes_with_length}
+    return {"top_3_shortest_notes": notes_with_length}
