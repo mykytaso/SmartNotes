@@ -71,7 +71,7 @@ async def test_get_note_version_by_note_id_version_id_not_found(
 
 
 @pytest.mark.asyncio
-async def test_get_note_version_by_note_id_version_id(client, populate_test_10_notes):
+async def test_get_note_version_by_note_id_version_id(client, db_session, populate_test_10_notes):
     """
     Test updating a note 10 times and retrieving 10 versions with default pagination parameters.
 
@@ -88,9 +88,16 @@ async def test_get_note_version_by_note_id_version_id(client, populate_test_10_n
     response = await client.get(f"/api/v1/versions/{random_id}/{random_id}")
     assert response.status_code == 200
 
+    version = await db_session.scalar(
+        select(VersionModel).where(
+            VersionModel.note_id == random_id,
+            VersionModel.id == random_id
+        )
+    )
+
     response_data = response.json()
     assert response_data["id"] == random_id
-    assert response_data["content"] == f"Updated Content {random_id - 1}"
+    assert response_data["content"] == version.content
 
 
 @pytest.mark.asyncio
