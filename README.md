@@ -164,7 +164,7 @@ The project is structured to facilitate modular development and ease of maintena
 
 To run the tests, use the following command:
 ```shell
-  pytest
+  python -m pytest
 ```
 
 <br>
