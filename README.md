@@ -46,6 +46,7 @@ The project is structured to facilitate modular development and ease of maintena
     │   ├── models.py
     │   ├── session.py
     │   └── source
+    │       ├── __init__.py
     │       └── notes.db
     ├── main.py
     ├── routes
@@ -64,7 +65,7 @@ The project is structured to facilitate modular development and ease of maintena
     └── tests
         ├── __init__.py
         ├── conftest.py
-        └── test
+        └── test_unit_integration
             ├── __init__.py
             ├── test_analytics.py
             ├── test_notes.py
@@ -77,18 +78,19 @@ The project is structured to facilitate modular development and ease of maintena
 
 ## 📦 &nbsp; Installation
 
-1. **Clone the repository:**
+1. **Clone the repository, preferably using your IDE rather than the terminal:**
     ```shell
     git clone https://github.com/mykytaso/notes-management-system.git
     ```
+    <img src="media/gitclone.png" alt="ModHeader" width="460"/>
     
     
-2. **Please make sure to set `src` directory as `Source Root` in your IDE.**
+2. **Please make sure to set the `src` directory as the `Source Root` in your IDE.**
     
     <img src="media/src.png" alt="ModHeader" width="460"/>
 
 
-3. **Create and activate virtual environment:**
+3. **Create and activate a virtual environment:**
     ```shell
     python3 -m venv .venv
     source .venv/bin/activate
@@ -110,11 +112,9 @@ The project is structured to facilitate modular development and ease of maintena
 6.  **Run the application** (please run the following commands in your `terminal`):
     
     ```shell
-    # Go to the src directory:
     cd src
     ```
     ```shell
-    # Run the application:
     uvicorn main:app --reload
     ```
 
