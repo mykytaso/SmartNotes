@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter
+from fastapi import Depends, APIRouter, HTTPException
 from fastapi.params import Query
 from sqlalchemy import select, func, cast, Float
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -45,6 +45,12 @@ async def get_total_words(db: AsyncSession = Depends(get_db)):
     Returns:
         The total word count of all notes in the database.
     """
+    note_exists = await db.scalar(select(func.count(NoteModel.id) > 0))
+
+    if not note_exists:
+        raise HTTPException(
+            status_code=404, detail="There are no notes in the database."
+        )
 
     statement = select(
         func.sum(
