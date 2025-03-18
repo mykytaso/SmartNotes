@@ -51,3 +51,15 @@ async def populate_test_10_notes(db_session):
     await db_session.flush()
     await db_session.commit()
     yield
+
+
+@pytest.fixture
+async def populate_test_10_notes_different_length(db_session):
+
+    notes = [NoteModel(content="TestContent " * i) for i in range(1, 10)]
+
+    db_session.add_all(notes)
+
+    await db_session.flush()
+    await db_session.commit()
+    yield
