@@ -77,37 +77,37 @@ The project is structured to facilitate modular development and ease of maintena
 
 ## 📦 &nbsp; Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
     ```shell
     git clone https://github.com/mykytaso/notes-management-system.git
     ```
     
     
-2. Please make sure to set `src` directory as Source Root in your IDE.
+2. **Please make sure to set `src` directory as `Source Root` in your IDE.**
     
     <img src="media/src.png" alt="ModHeader" width="460"/>
 
 
-3. Create and activate virtual environment:
+3. **Create and activate virtual environment:**
     ```shell
     python3 -m venv .venv
     source .venv/bin/activate
     ```
     
     
-4. Install the required dependencies:
+4. **Install the required dependencies:**
     ```shell
    pip install -r requirements.txt
     ```
 
 
-5. Set up environment variables:
+5. **Set up environment variables:**
    - Create a `.env` file.
    - Copy the content from `.env.sample` to `.env`.
    - Update the values in `.env` with your specific configuration.
 
 
-6.  Run the application (please run the following commands in your terminal):
+6.  **Run the application (please run the following commands in your terminal):**
     
     ```shell
     # Go to the `src` directory:
