@@ -82,7 +82,7 @@ The project is structured to facilitate modular development and ease of maintena
     ```shell
     git clone https://github.com/mykytaso/notes-management-system.git
     ```
-    <img src="media/gitclone.png" alt="ModHeader" width="460"/>
+    <img src="media/gitclone.png" alt="ModHeader" width="800"/>
     
     
 2. **Please make sure to set the `src` directory as the `Source Root` in your IDE.**
