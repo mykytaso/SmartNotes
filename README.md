@@ -128,24 +128,26 @@ The project is structured to facilitate modular development and ease of maintena
 
 - `/api/v1/notes` [GET] – Retrieve a list of notes.
 - `/api/v1/notes` [POST] – Create a new note.
-- `/api/v1/notes/{id}` [GET] – Retrieve a specific note by ID.
-- `/api/v1/notes/{id}` [PUT] – Update an existing note by ID.
-- `/api/v1/notes/{id}` [DELETE] – Delete a note by ID.
+- `/api/v1/notes/{note_id}` [GET] – Retrieve a specific note by ID.
+- `/api/v1/notes/{note_id}` [PUT] – Update an existing note by ID.
+- `/api/v1/notes/{note_id}` [DELETE] – Delete a note by ID.
 <br>
 
-- `/api/v1/versions/?note_id={note_id}` [GET] – Retrieve all versions of a note.
-- `/api/v1/versions/?note_id={note_id}&version_id={version_id}` [GET] – Retrieve a specific version of a note.
-- `/api/v1/versions/?note_id={note_id}&version_id={version_id}` [DELETE] – Delete a specific version of a note.
+
+- `/api/v1/versions/{note_id}` [GET] – Retrieve all versions of a note.
+- `/api/v1/versions/{note_id}/{version_id}` [GET] – Retrieve a specific version of a note.
+- `/api/v1/versions/{note_id}/{version_id}` [DELETE] – Delete a specific version of a note.
 <br>
 
-- `/api/v1/notes/{id}/summary/?max_words={int}` [GET] – Get a summary of a note.
+
+- `/api/v1/analytics/summary/?note_id={int}&max_words={int}` [GET] – Get a summary of a note.
   - Optional parameter: `max_words` – The maximum number of words in the summary (default: 10).
-- `/api/v1/notes/analytics/total-words` [GET] – Get the total word count across all notes.
-- `/api/v1/notes/analytics/avg-note-length` [GET] – Get the average length of notes.
-- `/api/v1/notes/analytics/most-common-words-or-phrases/?max_phrase_length={int}` [GET] – Get the most common words or phrases across all notes.
+- `/api/v1/analytics/total-words` [GET] – Get the total word count across all notes.
+- `/api/v1/analytics/avg-note-length` [GET] – Get the average length of notes.
+- `/api/v1/analytics/most-common-words-or-phrases/?max_phrase_length={int}` [GET] – Get the most common words or phrases across all notes.
   - Parameter: `max_phrase_length` – The maximum length of phrases to consider, ranging from 1 to 10 words (default: 3).
-- `/api/v1/notes/analytics/top-3-longest-notes` [GET] – Retrieve the top 3 longest notes.
-- `/api/v1/notes/analytics/top-3-shortest-notes` [GET] – Retrieve the top 3 shortest notes.
+- `/api/v1/analytics/top-3-longest-notes` [GET] – Retrieve the top 3 longest notes.
+- `/api/v1/analytics/top-3-shortest-notes` [GET] – Retrieve the top 3 shortest notes.
 <br>
 
 >**Example:** `http://127.0.0.1:8000/api/v1/notes`
