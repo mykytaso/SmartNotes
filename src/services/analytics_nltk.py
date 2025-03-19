@@ -1,7 +1,5 @@
-import string
-
 import nltk
-from nltk import word_tokenize, FreqDist
+from nltk import FreqDist, RegexpTokenizer
 from nltk.util import ngrams
 
 from config import get_settings
@@ -17,7 +15,8 @@ nltk.download("punkt_tab", download_dir=str(settings.NLTK_DATA_PATH))
 async def get_common_words_phrases(notes, max_phrase_length: int):
 
     # Tokenize the content
-    word_tokenized = word_tokenize(" ".join(notes))
+    tokenizer = RegexpTokenizer(r"\w+")
+    word_tokenized = tokenizer.tokenize(" ".join(notes))
 
     # Initialize a frequency distribution
     fd = FreqDist()
@@ -29,14 +28,5 @@ async def get_common_words_phrases(notes, max_phrase_length: int):
             fd[" ".join(phrase)] += 1
 
     return {
-        common: appearance
-        for common, appearance in fd.most_common()
-        if appearance > 1
-        and common not in string.punctuation
-        and common
-        not in [
-            "'",
-            "’",
-            "—",
-        ]
+        common: appearance for common, appearance in fd.most_common() if appearance > 1
     }
