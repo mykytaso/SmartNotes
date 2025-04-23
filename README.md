@@ -82,7 +82,7 @@ The project is structured to facilitate modular development and ease of maintena
     ```shell
     git clone https://github.com/mykytaso/SmartNotes.git
     ```
-    <img src="media/gitclone.png" alt="ModHeader" width="800"/>
+    <img src="media/gitclone.png" alt="ModHeader" width="460"/>
     
     
 2. **Please make sure to set the `src` directory as the `Source Root` in your IDE.**
