@@ -1,8 +1,8 @@
-# Notes Management System API
+# SmartNotes
 
 ## An API service for managing notes with analytics and AI-powered summarization.
 
-- Notes Management System – allows to create, edit, and delete notes.
+- SmartNotes – allows to create, edit, and delete notes.
 - Automatic versioning: stores previous versions of notes during updates.
 - AI summarization powered by Gemini API.
 - Analytics:
@@ -80,7 +80,7 @@ The project is structured to facilitate modular development and ease of maintena
 
 1. **Clone the repository, preferably using your IDE rather than the terminal:**
     ```shell
-    git clone https://github.com/mykytaso/notes-management-system.git
+    git clone https://github.com/mykytaso/SmartNotes.git
     ```
     <img src="media/gitclone.png" alt="ModHeader" width="800"/>
     
